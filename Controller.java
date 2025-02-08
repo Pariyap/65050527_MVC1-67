@@ -1,3 +1,5 @@
+import Model.FourUdderModel;
+import Model.ThreeUdderModel;
 import Model.farmModel;
 
 public class Controller {
@@ -5,12 +7,16 @@ public class Controller {
     private MainView inputView;
     private CowView cowView;
     private GoatView goatView;
+    private FourUdderModel fourUdderCow;
+    private ThreeUdderModel threeUdderModel;
 
     Controller() {
         farm = new farmModel();
         inputView = new MainView();
         cowView = new CowView();
         goatView = new GoatView();
+        fourUdderCow = new FourUdderModel();
+        threeUdderModel = new ThreeUdderModel();
 
     }
 
@@ -48,30 +54,27 @@ public class Controller {
 
     public void checkifCows(int id) {
         farmModel tempFarm = farm.readRecords(id);
-        String checkIfGoat = String.valueOf(tempFarm.getCowAgeYear());
-        if (checkIfGoat == "") {
+        String checkIfGoat = String.valueOf(tempFarm.getUdderAmounts());
+        System.err.println(checkIfGoat);
+        if (checkIfGoat.equals("0")) {
+            System.out.println("Hello Goat");
             goatView.IfoundtheGoat();
         }
 
         else {
             if (tempFarm.getUdderAmounts() == 3) {
+                threeUdderModel.luckyUdder(id);
                 cowView.disableCow();
+
             }
 
             else {
-                calculateMiik(id);
+                int milk = fourUdderCow.calculateMiik(id);
+                cowView.showsMilkamount(id, milk);
             }
 
         }
 
-    }
-
-    private void calculateMiik(int id) {
-        farmModel tempFarm = farm.readRecords(id);
-        System.out.println("here is " + tempFarm.getCowID());
-        int milkamount = tempFarm.getCowAgeMonth() + tempFarm.getCowAgeYear();
-        int curCowID = tempFarm.getCowID();
-        cowView.showsMilkamount(curCowID, milkamount);
     }
 
 }
